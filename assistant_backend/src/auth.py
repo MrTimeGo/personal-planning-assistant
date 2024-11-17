@@ -3,7 +3,10 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_required, login_user, logout_user, current_user
 
 from src.repositories.user import create_user, get_user_by_email
-from src.models.user import User
+from src.repositories.verification_code import new_verification_code
+from src.mailer import send_verification_code
+
+from decouple import config
 
 auth = Blueprint('auth', __name__)
 
@@ -18,8 +21,10 @@ def signup():
     if user:
         return 'User already exists', 409
 
-    new_user = User(email, generate_password_hash(password))
-    create_user(new_user)
+    new_user = create_user(email, generate_password_hash(password))
+
+    verification_code = new_verification_code(new_user.id)
+    send_verification_code(new_user.email, verification_code.code)
 
     return 'Success', 201
 

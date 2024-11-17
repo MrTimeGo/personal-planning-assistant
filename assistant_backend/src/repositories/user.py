@@ -10,7 +10,9 @@ def get_user_by_id(id):
     return User.query.filter_by(id=id).first()
 
 
-def create_user(user):
+def create_user(email, password):
+    user = User(email, password)
+
     db.session.add(user)
     db.session.commit()
 

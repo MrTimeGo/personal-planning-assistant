@@ -7,8 +7,13 @@ if DATABASE_URI.startswith("postgres://"):
 
 class Config(object):
     SECRET_KEY = config("SECRET_KEY", default="guess-me")
+
     SQLALCHEMY_DATABASE_URI = DATABASE_URI
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+    MAIL_DEFAULT_SENDER = config("MAIL_DEFAULT_SENDER")
+    MAIL_USERNAME = config("EMAIL_USER")
+    MAIL_PASSWORD = config("EMAIL_PASSWORD")
 
 
 class DevelopmentConfig(Config):
