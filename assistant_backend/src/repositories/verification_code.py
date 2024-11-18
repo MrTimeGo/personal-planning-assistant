@@ -8,6 +8,10 @@ def get_verification_code_by_user_id(user_id):
     return VerificationCode.query.filter_by(user_id=user_id).first()
 
 
+def get_user_by_code(code):
+    return VerificationCode.query.filter_by(code=code).first()
+
+
 def new_verification_code(user_id):
     verification_code = get_verification_code_by_user_id(user_id)
     if verification_code:

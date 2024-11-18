@@ -18,7 +18,9 @@ class Config(object):
 
 class DevelopmentConfig(Config):
     DEBUG = True
+    VERIFICATION_REQUIRED = False
 
 
 class ProductionConfig(Config):
     DEBUG = False
+    VERIFICATION_REQUIRED = True
