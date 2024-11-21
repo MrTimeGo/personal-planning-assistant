@@ -1,6 +1,8 @@
 from enum import Enum
 from typing import List
 
+from src.utils.text_to_speech import text_to_base64_speech
+
 
 class Command(Enum):
     CREATE_NOTE = 'create_note'
@@ -28,8 +30,17 @@ class Question:
             expected_input_type: ExpectedInputType
     ):
         self.phrase = phrase
+        self.b64_phrase = text_to_base64_speech(phrase)
         self.expected_input_field = expected_input_field
         self.expected_input_type = expected_input_type
+
+    def serialize(self):
+        return {
+            'phrase': self.phrase,
+            'b64_phrase': self.b64_phrase,
+            'expected_input_field': self.expected_input_field,
+            'expected_input_type': self.expected_input_type.value,
+        }
 
 
 class Scenario:
@@ -40,6 +51,12 @@ class Scenario:
     ):
         self.trigger = trigger
         self.questions = questions
+
+    def serialize(self):
+        return {
+            'trigger': self.trigger,
+            'questions': [q.serialize() for q in self.questions],
+        }
 
 
 scenarios = {
@@ -86,7 +103,7 @@ scenarios = {
         questions=[]
     ),
     Command.LIST_EVENTS_NEXT_WEEK: Scenario(
-        trigger='What is planned for the next week?',
+        trigger='What is planned for next week?',
         questions=[]
     ),
     Command.REMOVE_EVENT: Scenario(

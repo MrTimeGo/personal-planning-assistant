@@ -1,3 +1,5 @@
+from email.policy import default
+
 from decouple import config
 
 DATABASE_URI = config("DATABASE_URL")
@@ -14,6 +16,8 @@ class Config(object):
     MAIL_DEFAULT_SENDER = config("MAIL_DEFAULT_SENDER")
     MAIL_USERNAME = config("EMAIL_USER")
     MAIL_PASSWORD = config("EMAIL_PASSWORD")
+
+    SPEECH_RECOGNITION_MODEL_SIZE = config("SPEECH_RECOGNITION_MODEL_SIZE", default="base")
 
 
 class DevelopmentConfig(Config):

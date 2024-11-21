@@ -1,11 +1,12 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { base64 } from './base64-example-audio';
+import { exampleAudio } from './base64-example-audio';
+import { AudioRecorderComponent } from "./audio-recorder/audio-recorder.component";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, AudioRecorderComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
@@ -16,7 +17,7 @@ export class AppComponent {
 
 
   play() {
-    const audioBase64 = base64;
+    const audioBase64 = exampleAudio.base64;
     const audioBinary = atob(audioBase64);  // Decode base64
     const audioArray = new Uint8Array(audioBinary.length);
 
