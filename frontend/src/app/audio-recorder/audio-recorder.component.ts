@@ -50,11 +50,11 @@ export class AudioRecorderComponent {
     const formData = new FormData();
     formData.append('audio', audioBlob, 'recording.wav');
 
-    this.http.post(`${environment.backendUrl}/recognize_command`, formData)
+    this.http.post(`${environment.backendUrl}/recognize_date`, formData)
       .subscribe({
         next: (response: any) => {
           console.log('Audio uploaded successfully', response)
-          exampleAudio.base64 = response.scenario.questions[0].b64_phrase;
+          //exampleAudio.base64 = response.scenario.questions[0].b64_phrase;
         },
         error: (error) => {
           console.error('Error uploading audio', error)
