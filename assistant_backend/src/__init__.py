@@ -7,7 +7,9 @@ from flask_cors import CORS
 
 from .auth import auth as auth_blueprint
 from .main import main as main_blueprint
-from .command_recognizer import recognizer as recognizer_blueprint
+from .recognizer import recognizer as recognizer_blueprint
+from .events import events as events_blueprint
+from .notes import notes as notes_blueprint
 
 from src.db.db import db
 from src.repositories.user import get_user_by_id
@@ -17,6 +19,8 @@ cors = CORS(app)
 app.config.from_object(config("APP_SETTINGS"))
 app.register_blueprint(auth_blueprint)
 app.register_blueprint(recognizer_blueprint)
+app.register_blueprint(events_blueprint)
+app.register_blueprint(notes_blueprint)
 app.register_blueprint(main_blueprint)
 
 db.init_app(app)
