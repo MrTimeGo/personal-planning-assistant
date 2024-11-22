@@ -10,4 +10,7 @@
 - `src/db/db.py` - contains one variable `db` which is the database connection.
 It is here because of circular imports. Refactor it if you can.
 - 
-    ```
+    ``` ```
+  
+## Known issues
+- Problem: `Error: pg_config executable not found.`. Fix: `sudo apt-get install libpq-dev`.
