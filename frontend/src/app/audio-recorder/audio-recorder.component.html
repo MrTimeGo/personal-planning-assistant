@@ -1,0 +1,4 @@
+<div class="voice-recorder">
+  <button (click)="startRecording()" [disabled]="isRecording">Start Recording</button>
+  <button (click)="stopRecording()" [disabled]="!isRecording">Stop Recording</button>
+</div>
