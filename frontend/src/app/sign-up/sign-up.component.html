@@ -1,0 +1,46 @@
+<div class="wrapper" [formGroup]="form">
+  <div class="box">
+    <h2>Sign up</h2>
+    <mat-form-field>
+    <mat-label>Enter your email</mat-label>
+    <input
+      matInput
+      placeholder="test@example.com"
+      formControlName="email"
+      (blur)="updateEmailErrorMessage()"
+      required
+    />
+    @if (form.controls.email.invalid) {
+      <mat-error>{{emailErrorMessage()}}</mat-error>
+    }
+  </mat-form-field>
+    <mat-form-field>
+      <mat-label>Enter your password</mat-label>
+        <input
+          matInput
+          formControlName="password"
+          (blur)="updatePasswordErrorMessage()"
+          required
+        />
+        @if (form.controls.password.invalid) {
+          <mat-error>{{passwordErrorMessage()}}</mat-error>
+        }
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Confirm your password</mat-label>
+        <input
+          matInput
+          formControlName="confirmPassword"
+          (blur)="updateConfirmPasswordErrorMessage()"
+          required
+        />
+        @if (form.controls.confirmPassword.invalid) {
+          <mat-error>{{confirmPasswordErrorMessage()}}</mat-error>
+        }
+      </mat-form-field>
+      @if (form.invalid) {
+           <mat-error>{{confirmPasswordErrorMessage()}}</mat-error>
+         }
+    <button mat-flat-button>Sign up</button>
+  </div>
+</div>

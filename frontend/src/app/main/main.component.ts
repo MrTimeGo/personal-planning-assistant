@@ -1,10 +1,11 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { base64 } from '../base64-example-audio';
+import { IoComponent } from "../io/io.component";
 
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [],
+  imports: [IoComponent],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss',
 })
