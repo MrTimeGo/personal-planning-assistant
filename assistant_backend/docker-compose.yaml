@@ -14,5 +14,22 @@ services:
       - POSTGRES_USER=assistant
       - POSTGRES_DB=assistant
 
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    restart: on-failure
+    environment:
+      - DATABASE_URL=postgresql://assistant:assistant@db:5432/assistant
+      - APP_SETTINGS=config.ProductionConfig
+      - EMAIL_USER=
+      - EMAIL_PASSWORD=
+      - MAIL_DEFAULT_SENDER=
+      - SPEECH_RECOGNITION_MODEL_SIZE=base
+    depends_on:
+      - db
+
 volumes:
   postgres_data:
