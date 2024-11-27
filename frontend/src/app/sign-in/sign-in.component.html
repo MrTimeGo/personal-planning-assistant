@@ -2,30 +2,32 @@
   <div class="box">
     <h2>Sign in</h2>
     <mat-form-field>
-    <mat-label>Enter your email</mat-label>
-    <input
-      matInput
-      placeholder="test@example.com"
-      formControlName="email"
-      (blur)="updateEmailErrorMessage()"
-      required
-    />
-    @if (form.controls.email.invalid) {
-      <mat-error>{{emailErrorMessage()}}</mat-error>
-    }
-  </mat-form-field>
+      <mat-label>Enter your email</mat-label>
+      <input
+        matInput
+        placeholder="test@example.com"
+        formControlName="email"
+        (blur)="updateEmailErrorMessage()"
+        required
+      />
+      @if (form.controls.email.invalid) {
+      <mat-error>{{ emailErrorMessage() }}</mat-error>
+      }
+    </mat-form-field>
     <mat-form-field>
-    <mat-label>Enter your password</mat-label>
-    <input
-      matInput
-      formControlName="password"
-      (blur)="updatePasswordErrorMessage()"
-      required
-    />
-    @if (form.controls.password.invalid) {
-      <mat-error>{{passwordErrorMessage()}}</mat-error>
-    }
-  </mat-form-field>
-    <button mat-flat-button>Log in</button>
+      <mat-label>Enter your password</mat-label>
+      <input
+        matInput
+        formControlName="password"
+        (blur)="updatePasswordErrorMessage()"
+        required
+      />
+      @if (form.controls.password.invalid) {
+      <mat-error>{{ passwordErrorMessage() }}</mat-error>
+      }
+    </mat-form-field>
+    <button mat-flat-button [disabled]="form.invalid" (click)="submit()">
+      Log in
+    </button>
   </div>
 </div>

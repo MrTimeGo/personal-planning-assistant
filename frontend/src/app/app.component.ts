@@ -11,25 +11,25 @@ import { AudioRecorderComponent } from "./audio-recorder/audio-recorder.componen
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  title = 'frontend';
+  // title = 'frontend';
 
-  @ViewChild('audioPlayer') audio!: ElementRef;
+  // @ViewChild('audioPlayer') audio!: ElementRef;
 
 
-  play() {
-    const audioBase64 = exampleAudio.base64;
-    const audioBinary = atob(audioBase64);  // Decode base64
-    const audioArray = new Uint8Array(audioBinary.length);
+  // play() {
+  //   const audioBase64 = exampleAudio.base64;
+  //   const audioBinary = atob(audioBase64);  // Decode base64
+  //   const audioArray = new Uint8Array(audioBinary.length);
 
-    for (let i = 0; i < audioBinary.length; i++) {
-        audioArray[i] = audioBinary.charCodeAt(i);
-    }
+  //   for (let i = 0; i < audioBinary.length; i++) {
+  //       audioArray[i] = audioBinary.charCodeAt(i);
+  //   }
 
-    const audioBlob = new Blob([audioArray], { type: 'audio/mpeg' });
-    const audioUrl = URL.createObjectURL(audioBlob);
+  //   const audioBlob = new Blob([audioArray], { type: 'audio/mpeg' });
+  //   const audioUrl = URL.createObjectURL(audioBlob);
 
-    // Set the audio player source to the decoded audio
-    this.audio.nativeElement.src = audioUrl;
-    this.audio.nativeElement.play();
-  }
+  //   // Set the audio player source to the decoded audio
+  //   this.audio.nativeElement.src = audioUrl;
+  //   this.audio.nativeElement.play();
+  // }
 }

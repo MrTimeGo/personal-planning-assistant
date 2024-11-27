@@ -41,6 +41,6 @@
       @if (form.invalid) {
            <mat-error>{{confirmPasswordErrorMessage()}}</mat-error>
          }
-    <button mat-flat-button>Sign up</button>
+    <button mat-flat-button [disabled]="form.invalid" (click)="submit()">Sign up</button>
   </div>
 </div>

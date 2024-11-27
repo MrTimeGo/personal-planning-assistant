@@ -1,18 +1,33 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-
+import { AuthService } from '../services/auth.service';
+import { Auth } from '../models/auth';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sign-in',
   standalone: true,
-  imports: [MatFormFieldModule, MatInputModule, MatButtonModule, ReactiveFormsModule],
+  imports: [
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    ReactiveFormsModule,
+  ],
   templateUrl: './sign-in.component.html',
   styleUrl: './sign-in.component.scss',
 })
 export class SignInComponent {
+  authService = inject(AuthService);
+  router = inject(Router);
+
   form = new FormGroup({
     email: new FormControl('', [Validators.email, Validators.required]),
     password: new FormControl('', [Validators.required]),
@@ -37,5 +52,20 @@ export class SignInComponent {
     } else {
       this.passwordErrorMessage.set('');
     }
+  }
+
+  submit() {
+    if (this.form.invalid) {
+      return;
+    }
+
+    this.authService.signIn(this.form.value as unknown as Auth).subscribe({
+      next: () => {
+        this.router.navigate(['']);
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    });
   }
 }

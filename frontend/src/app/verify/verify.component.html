@@ -13,6 +13,6 @@
       <mat-error>{{ codeErrorMessage() }}</mat-error>
       }
     </mat-form-field>
-    <button mat-flat-button>Verify</button>
+    <button mat-flat-button [disabled]="form.invalid" (click)="submit()">Verify</button>
   </div>
 </div>
