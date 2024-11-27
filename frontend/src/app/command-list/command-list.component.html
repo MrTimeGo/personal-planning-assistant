@@ -1,0 +1,11 @@
+<div class="col-span-2 bg-gray-300 flex gap-2 flex-col p-4 h-[95%]">
+  @if(profile){
+    <h3>{{profile}},</h3>
+  }
+  <h3 class="text-gray-800">Here is the command list:</h3>
+  <div class="mt-4 flex gap-2 flex-col">
+    @for (command of commands; track $index) {
+      <app-message message="{{command}}"></app-message>
+    }   
+  </div>
+</div>

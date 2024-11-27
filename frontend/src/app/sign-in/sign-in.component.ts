@@ -9,8 +9,8 @@ import {
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from '../services/auth.service';
-import { Auth } from '../models/auth';
 import { Router } from '@angular/router';
+import { Auth } from '../models/auth';
 
 @Component({
   selector: 'app-sign-in',
