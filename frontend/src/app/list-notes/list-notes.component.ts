@@ -1,29 +1,86 @@
-import { Component, inject, Input } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  OnDestroy,
+  Output,
+} from '@angular/core';
 import { NoteService } from '../services/note.service';
 import { CommonModule } from '@angular/common';
 import { MessageComponent } from '../message/message.component';
-import { Scenario } from '../models/scenario';
-import { map, tap } from 'rxjs';
+import { map, Observable, Subscription, switchMap, tap } from 'rxjs';
 import { IoService } from '../services/io.service';
+import { RecognizerService } from '../services/recognizer.service';
+import { MatIconModule } from '@angular/material/icon';
+import { AudioResponse } from '../models/audio-response';
+import { Scenario } from '../models/scenario';
 
 @Component({
   selector: 'app-list-notes',
   standalone: true,
-  imports: [CommonModule, MessageComponent],
+  imports: [
+    CommonModule,
+    MessageComponent,
+    MatIconModule,
+  ],
   templateUrl: './list-notes.component.html',
   styleUrl: './list-notes.component.scss',
 })
-export class ListNotesComponent {
+export class ListNotesComponent implements OnDestroy {
   noteService = inject(NoteService);
   ioService = inject(IoService);
+  recognizerService = inject(RecognizerService);
 
   @Input() scenario!: Scenario;
+  @Output() goBack = new EventEmitter();
 
-  notes$ = this.noteService.getNotes().pipe(
-    tap((response) => {
-      console.log(response);
-      this.ioService.read(response.b64_phrase, response.phrase);
-    }),
-    map((response) => response.body)
-  );
+  micSubscription: Subscription | null = null;
+
+  notes: string[] = [];
+
+  constructor() {
+    this.noteService
+      .getNotes()
+      .pipe(
+        tap((response) => {
+          this.ioService.read(response.b64_phrase, response.phrase);
+          setTimeout(() => {
+            this.ioService.read(
+              this.scenario.questions[0].b64_phrase,
+              this.scenario.questions[0].phrase
+            );
+          }, 3000);
+        }),
+        map((response) => response.body)
+      )
+      .subscribe((notes) => {
+        this.notes = [...this.notes, ...notes];
+      });
+
+    this.micSubscription = this.ioService.micOutput$
+      .pipe(
+        switchMap((audio) => this.recognizerService.recognizeBoolean(audio)),
+        switchMap((response) => {
+          if (response.result) {
+            return this.noteService.getNotes();
+          }
+          return new Observable<null>();
+        }),
+        map((response?: AudioResponse<string[]> | null) =>response ? response.body : [])
+      )
+      .subscribe((notes) => {
+        if (notes.length > 0) {
+          this.notes = [...this.notes, ...notes];
+          this.ioService.read(
+            this.scenario.questions[0].b64_phrase,
+            this.scenario.questions[0].phrase
+          );
+        }
+      });
+  }
+  ngOnDestroy(): void {
+    this.micSubscription?.unsubscribe();
+    this.ioService.clearAudioQueue();
+  }
 }

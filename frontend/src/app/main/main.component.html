@@ -8,10 +8,20 @@
     <button (click)="logout()">Log out</button>
   </div>
   <div class="flex-1 grid grid-cols-2">
-    <div class="m-4">
+    <div class="m-4 h-[90vh]">
       @switch (currentCommand) { @case (commandEnum.LIST_NOTES) {
-      <app-list-notes [scenario]="scenario!"></app-list-notes>
-      } @default {
+      <app-list-notes
+        [scenario]="scenario!"
+        (goBack)="toggleView(null)"
+      ></app-list-notes>
+      }
+      @case (commandEnum.CREATE_NOTE) {
+      <app-new-note
+        [scenario]="scenario!"
+        (goBack)="toggleView(null)"
+      ></app-new-note>
+      }
+       @default {
       <app-command-list></app-command-list>
       } }
     </div>

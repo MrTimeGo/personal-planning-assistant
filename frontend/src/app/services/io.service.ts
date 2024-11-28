@@ -23,11 +23,15 @@ export class IoService {
   }
 
   read(b64Phrase: string, phrase: string) {
-    console.log(b64Phrase, phrase);
+    console.log('read');
     this._audioQueue$.next({ b64Phrase, phrase });
   }
 
   output(audio: Blob) {
     this._micOutput$.next(audio);
+  }
+
+  clearAudioQueue(){
+    this._audioQueue$.next({b64Phrase: '', phrase: ''});
   }
 }

@@ -40,6 +40,7 @@ export class IoComponent {
     const audioUrl = URL.createObjectURL(audioBlob);
 
     // Set the audio player source to the decoded audio
+    console.log(audioUrl);
     this.audio.nativeElement.src = audioUrl;
     this.audio.nativeElement.play();
   }
