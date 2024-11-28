@@ -10,13 +10,14 @@ def get_notes():
     page = request.args.get('page', 1, type=int)
 
     # get first 5 notes
+    # add notes created date!!!
     notes_page = ['note1', 'note2', 'note3', 'note4', 'note5']
 
     phrase = "Here are some notes that I found"
     return jsonify({
         "phrase": phrase,
         "b64_phrase": text_to_base64_speech(phrase),
-        "notes": notes_page
+        "body": notes_page
     })
 
 

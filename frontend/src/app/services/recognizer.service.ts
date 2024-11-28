@@ -1,0 +1,32 @@
+import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
+import { environment } from '../../environments/environment.development';
+import { Scenario } from '../models/scenario';
+import { Command } from '../models/command';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class RecognizerService {
+  baseUrl = environment.backendUrl;
+
+  httpClient = inject(HttpClient);
+
+  recognizeCommand(audio: Blob) {
+    const formData = new FormData();
+    formData.append('audio', audio, 'recording.wav');
+    return this.httpClient.post<{ command: Command; scenario: Scenario }>(
+      `${this.baseUrl}/recognize_command`,
+      formData
+    );
+  }
+
+  recognizeText(audio: Blob) {
+    const formData = new FormData();
+    formData.append('audio', audio, 'recording.wav');
+    return this.httpClient.post<{ command: Command; scenario: Scenario }>(
+      `${this.baseUrl}/recognize_boolean`,
+      formData
+    );
+  }
+}
