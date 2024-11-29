@@ -10,6 +10,7 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String, unique=True, nullable=False)
     hash_password = db.Column(db.String, nullable=False)
     is_confirmed = db.Column(db.Boolean, nullable=False, default=False)
+    calendar_id = db.Column(db.String, nullable=True)
 
     def __init__(self, email, password, is_confirmed=False):
         self.email = email

@@ -5,7 +5,7 @@ from flask import redirect, url_for, current_app
 
 from src.repositories.user import create_user, get_user_by_email, mark_user_as_confirmed
 from src.repositories.verification_code import new_verification_code, get_verification_code_by_user_id
-from src.mailer import send_verification_code
+from src.mailer.mailer import send_verification_code
 
 from functools import wraps
 

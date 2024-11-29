@@ -1,7 +1,7 @@
-from google_calendar import impl
+from src.google_calendar import impl
 from datetime import datetime, timedelta
-from google_calendar.types import Event
-from google_calendar.utils import get_week_range
+from src.google_calendar.types import Event
+from src.google_calendar.utils import get_week_range
 
 if __name__ == "__main__":
     calendar_id = '036ecfe1a25e74938a2224b16a0c224beebcd3b5b8cab3cfba1562ceb6ddbf58@group.calendar.google.com'

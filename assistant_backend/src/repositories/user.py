@@ -2,6 +2,12 @@ from src.db.db import db
 from src.models.user import User
 
 
+def update_user_calendar(user_id, calendar_id):
+    user = User.query.filter_by(id=user_id).first()
+    user.calendar_id = calendar_id
+    db.session.commit()
+
+
 def get_user_by_email(email) -> User:
     return User.query.filter_by(email=email).first()
 
