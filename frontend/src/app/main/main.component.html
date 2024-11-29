@@ -1,0 +1,21 @@
+<!-- <audio #audioPlayer controls></audio> -->
+
+<!-- <button (click)="play()">Play</button> -->
+@if(profile | async; as prof){
+<div class="flex flex-col h-screen">
+  <div class="text-center">
+    {{ prof }}
+    <button (click)="logout()">Log out</button>
+  </div>
+  <div class="flex-1 grid grid-cols-2">
+    <div class="m-4">
+      @switch (currentCommand) { @case (commandEnum.LIST_NOTES) {
+      <app-list-notes [scenario]="scenario!"></app-list-notes>
+      } @default {
+      <app-command-list></app-command-list>
+      } }
+    </div>
+    <app-io></app-io>
+  </div>
+</div>
+}

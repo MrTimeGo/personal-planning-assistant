@@ -85,7 +85,7 @@ def login():
     return 'Success', 200
 
 
-@auth.route('/profile', methods=["POST"])
+@auth.route('/profile', methods=["GET"])
 @login_verify_required
 def profile():
     return "Hello " + current_user.email

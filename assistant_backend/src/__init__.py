@@ -15,7 +15,6 @@ from src.repositories.user import get_user_by_id
 
 app = Flask(__name__)
 cors = CORS(app, supports_credentials=True, allow_headers="*")
-
 app.config.from_object(config("APP_SETTINGS"))
 
 app.register_blueprint(auth_blueprint)

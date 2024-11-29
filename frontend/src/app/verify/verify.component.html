@@ -1,0 +1,18 @@
+<div class="wrapper" [formGroup]="form">
+  <div class="box">
+    <h2>Verification code</h2>
+    <mat-form-field>
+      <mat-label>Enter verification code</mat-label>
+      <input
+        matInput
+        formControlName="code"
+        (blur)="updateCodeErrorMessage()"
+        required
+      />
+      @if (form.controls.code.invalid) {
+      <mat-error>{{ codeErrorMessage() }}</mat-error>
+      }
+    </mat-form-field>
+    <button mat-flat-button [disabled]="form.invalid" (click)="submit()">Verify</button>
+  </div>
+</div>
