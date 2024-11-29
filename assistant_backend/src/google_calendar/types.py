@@ -3,6 +3,7 @@ from datetime import datetime
 
 def event_from_calendar_body(body):
     return Event(
+        id=body['id'],
         name=body['summary'],
         start_time=datetime.fromisoformat(body['start']['dateTime']),
         end_time=datetime.fromisoformat(body['end']['dateTime'])
@@ -10,7 +11,8 @@ def event_from_calendar_body(body):
 
 
 class Event:
-    def __init__(self, name: str, start_time: datetime, end_time: datetime):
+    def __init__(self, name: str, start_time: datetime, end_time: datetime, id=0):
+        self.id = id
         self.name = name
         self.start_time = start_time
         self.end_time = end_time
@@ -34,3 +36,9 @@ class Event:
             },
         }
 
+    def to_dict(self):
+        return {
+            'name': self.name,
+            'start_time': self.start_time.isoformat(),
+            'end_time': self.end_time.isoformat(),
+        }

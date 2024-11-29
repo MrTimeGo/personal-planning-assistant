@@ -19,7 +19,7 @@ def add_shared_calendar(calendar_id):
         if e.resp.status == 404:
             raise Exception(f"Calendar not found")
         if e.resp.status == 403:
-            raise Exception(f"Insufficient permissions to add calendar")
+            raise Exception(f"Insufficient permissions")
         if e.resp.status == 409:
             return
         raise Exception(f"Failed to add calendar")
@@ -27,7 +27,8 @@ def add_shared_calendar(calendar_id):
         raise Exception(f"Failed to add calendar")
 
     if not valid_calendar_access(calendar_id):
-        raise Exception(f"Insufficient permissions for calendar")
+        raise Exception(f"Insufficient permissions")
+
 
 def valid_calendar_access(calendar_id):
     try:
@@ -37,16 +38,17 @@ def valid_calendar_access(calendar_id):
         access_role = calendar.get('accessRole', 'unknown')
 
         # Determine if the access role allows modification
-        if access_role in ['owner', 'writer']:
-            return True
+        if access_role not in ['owner', 'writer']:
+            return False
 
-        return False
+        return True
     except HttpError as e:
         if e.resp.status == 404:
             raise Exception(f"Calendar not found")
         raise Exception(f"Failed to validate calendar access")
     except:
         raise Exception(f"Failed to validate calendar access")
+
 
 def create_event(calendar_id, event: Event):
     try:
@@ -65,7 +67,15 @@ def create_event(calendar_id, event: Event):
 
 def list_events(calendar_id):
     try:
-        events = service.events().list(calendarId=calendar_id).execute().get('items', [])
+        events_result = service.events().list(calendarId=calendar_id).execute()
+        if not events_result:
+            return []
+
+        events = []
+        for event in events_result['items']:
+            events.append(event_from_calendar_body(event))
+
+        return events
     except HttpError as e:
         if e.resp.status == 404:
             raise Exception(f"Calendar not found")
@@ -78,6 +88,15 @@ def list_events(calendar_id):
         raise Exception(f"Failed to list events")
 
     return events
+
+def list_events_period(calendar_id, period):
+    if period == 'today':
+        return list_events_today(calendar_id)
+    if period == 'this_week':
+        return list_events_this_week(calendar_id)
+    if period == 'next_week':
+        return list_events_next_week(calendar_id)
+    return []
 
 def list_events_today(calendar_id):
     start_time, end_time = get_today_range()
@@ -119,6 +138,20 @@ def list_events_in_time_range(calendar_id, start_time, end_time):
         raise Exception(f"Failed to list events")
     except:
         raise Exception(f"Failed to list events")
+
+
+def delete_event(calendar_id, event_id):
+    try:
+        service.events().delete(calendarId=calendar_id, eventId=event_id).execute()
+    except HttpError as e:
+        if e.resp.status == 404:
+            raise Exception(f"Calendar or event not found")
+        if e.resp.status == 403:
+            raise Exception(f"Insufficient permissions")
+        raise Exception(f"Failed to delete event")
+    except:
+        raise Exception(f"Failed to delete event")
+
 
 def delete_events_by_name(calendar_id, event_name: str):
     deleted_count = 0
