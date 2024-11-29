@@ -20,8 +20,11 @@ kyiv_tz = pytz.timezone('Europe/Kyiv')
 def calendar_track_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        if not current_user.calendar_id:
-            return 'Calendar is not being tracked', 400
+        try:
+            if not current_user.calendar_id:
+                return 'Calendar is not being tracked', 400
+        except AttributeError:
+            return 'Unauthorized', 401
 
         return f(*args, **kwargs)
 

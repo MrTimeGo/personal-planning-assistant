@@ -24,14 +24,14 @@ def get_notes():
         return jsonify({
             "phrase": phrase,
             "b64_phrase": text_to_base64_speech(phrase),
-            "notes": []
+            "body": []
         })
 
     phrase = "Here are some notes that I found"
     return jsonify({
         "phrase": phrase,
         "b64_phrase": text_to_base64_speech(phrase),
-        "notes": [note.to_dict() for note in notes_page]
+        "body": [note.to_dict() for note in notes_page]
     })
 
 

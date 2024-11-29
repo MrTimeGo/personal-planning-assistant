@@ -3,7 +3,7 @@ FROM python:3.12-slim
 WORKDIR /python-docker
 
 RUN apt-get update
-RUN apt-get install -y libpq-dev python3-dev
+RUN apt-get install -y libpq-dev python3-dev ffmpeg
 
 COPY requirements.txt requirements.txt
 RUN pip3 install -r requirements.txt
