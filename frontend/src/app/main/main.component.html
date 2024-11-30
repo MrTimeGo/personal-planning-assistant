@@ -8,10 +8,59 @@
     <button (click)="logout()">Log out</button>
   </div>
   <div class="flex-1 grid grid-cols-2">
-    <div class="m-4">
+    <div class="m-4 h-[90vh]">
       @switch (currentCommand) { @case (commandEnum.LIST_NOTES) {
-      <app-list-notes [scenario]="scenario!"></app-list-notes>
-      } @default {
+      <app-list-notes
+        [scenario]="scenario!"
+        (goBack)="toggleView(null)"
+      ></app-list-notes>
+      }
+      @case (commandEnum.CREATE_NOTE) {
+      <app-new-note
+        [scenario]="scenario!"
+        (goBack)="toggleView(null)"
+      ></app-new-note>
+      }
+      @case (commandEnum.GET_NOTE) {
+      <app-read-note
+        [scenario]="scenario!"
+        (goBack)="toggleView(null)"
+      ></app-read-note>
+      }
+      @case (commandEnum.CREATE_EVENT) {
+      <app-new-event
+        [scenario]="scenario!"
+        (goBack)="toggleView(null)"
+      ></app-new-event>
+      }
+      @case (commandEnum.LIST_EVENTS_NEXT_WEEK) {
+      <app-event-list
+        [scenario]="scenario!"
+        [command]="currentCommand"
+        (goBack)="toggleView(null)"
+      ></app-event-list>
+      }
+      @case (commandEnum.LIST_EVENTS_THIS_WEEK) {
+      <app-event-list
+        [scenario]="scenario!"
+        [command]="currentCommand"
+        (goBack)="toggleView(null)"
+      ></app-event-list>
+      }
+      @case (commandEnum.LIST_EVENTS_TODAY) {
+      <app-event-list
+        [scenario]="scenario!"
+        [command]="currentCommand"
+        (goBack)="toggleView(null)"
+      ></app-event-list>
+      }
+      @case (commandEnum.REMOVE_EVENT) {
+      <app-remove-event
+        [scenario]="scenario!"
+        (goBack)="toggleView(null)"
+      ></app-remove-event>
+      }
+       @default {
       <app-command-list></app-command-list>
       } }
     </div>

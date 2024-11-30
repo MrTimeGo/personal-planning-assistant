@@ -3,6 +3,7 @@ export interface Note {
   content: string;
 }
 
-export interface NoteShort{
+export interface NoteShort {
   name: string;
+  created_at: Date;
 }

@@ -1,0 +1,52 @@
+<div class="col-span-2 bg-gray-300 flex gap-2 flex-col p-4 h-[95%]">
+    <div class="flex gap-2 items-center">
+    <button class="flex items-center" mat-icon-button (click)="goBack.emit()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <h2 class="text-gray-800">Create an event</h2>
+  </div>
+  <div class="mt-4 flex gap-2 flex-col" [formGroup]="form">
+    <mat-form-field>
+      <mat-label>Enter event's name</mat-label>
+      <input
+        matInput
+        placeholder="Event name"
+        formControlName="name"
+        (blur)="updateNameErrorMessage()"
+        required
+      />
+      @if (form.controls.name.invalid) {
+      <mat-error>{{ nameErrorMessage() }}</mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Enter note's start date</mat-label>
+      <input
+        matInput
+        type="datetime-local"
+        formControlName="start"
+        (blur)="updateStartErrorMessage()"
+        required
+      />
+      @if (form.controls.start.invalid) {
+      <mat-error>{{ startErrorMessage() }}</mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Enter note's end date</mat-label>
+      <input
+        matInput
+        type="datetime-local"
+        formControlName="end"
+        (blur)="updateEndErrorMessage()"
+        required
+      />
+      @if (form.controls.end.invalid) {
+      <mat-error>{{ endErrorMessage() }}</mat-error>
+      }
+    </mat-form-field>
+    <button mat-raised-button [disabled]="form.invalid || index < 3" (click)="submit()">
+      Submit
+    </button>
+  </div>
+</div>

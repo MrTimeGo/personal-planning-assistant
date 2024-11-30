@@ -9,9 +9,14 @@ import { NewNoteComponent } from '../new-note/new-note.component';
 import { ListNotesComponent } from '../list-notes/list-notes.component';
 import { IoService } from '../services/io.service';
 import { RecognizerService } from '../services/recognizer.service';
-import { Command } from '../models/command';
 import { Subscription, switchMap } from 'rxjs';
+import { Command } from '../models/command';
 import { Scenario } from '../models/scenario';
+import { ReadNoteComponent } from "../read-note/read-note.component";
+import { NewEventComponent } from "../new-event/new-event.component";
+import { EventListComponent } from "../event-list/event-list.component";
+import { RemoveEventComponent } from "../remove-event/remove-event.component";
+
 
 @Component({
   selector: 'app-main',
@@ -20,9 +25,13 @@ import { Scenario } from '../models/scenario';
     IoComponent,
     CommonModule,
     CommandListComponent,
-    NewNoteComponent,
     ListNotesComponent,
-  ],
+    NewNoteComponent,
+    ReadNoteComponent,
+    NewEventComponent,
+    EventListComponent,
+    RemoveEventComponent
+],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss',
 })

@@ -1,6 +1,6 @@
 export interface Question {
   phrase: string;
-  b64Phrase: string;
+  b64_phrase: string;
 }
 
 export interface Scenario {
