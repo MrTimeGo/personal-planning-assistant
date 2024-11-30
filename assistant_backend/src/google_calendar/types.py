@@ -39,6 +39,6 @@ class Event:
     def to_dict(self):
         return {
             'name': self.name,
-            'start_time': self.start_time.isoformat(),
-            'end_time': self.end_time.isoformat(),
+            'start': self.start_time.isoformat(),
+            'end': self.end_time.isoformat(),
         }

@@ -70,7 +70,7 @@ def get_events(period: str):
         return jsonify({
             "b64_phrase": text_to_base64_speech(phrase),
             "phrase": phrase,
-            "events": []
+            "body": []
         }), 200
 
     phrase = f"Here are your events for {" ".join(period.split('_'))}: {", ".join([event.name for event in events_calendar])}."
@@ -78,7 +78,7 @@ def get_events(period: str):
     return jsonify({
         "b64_phrase": text_to_base64_speech(phrase),
         "phrase": phrase,
-        "events": [event.to_dict() for event in events_calendar]
+        "body": [event.to_dict() for event in events_calendar]
     }), 200
 
 
@@ -107,7 +107,7 @@ def create_event():
         return jsonify({
             "b64_phrase": text_to_base64_speech(phrase),
             "phrase": phrase,
-            "event": event.to_dict()
+            "body": event.to_dict()
         }), 201
 
     except ValueError:
@@ -123,12 +123,10 @@ def create_event():
         return 'Failed to create event', 500
 
 
-@events.route('/events', methods=['DELETE'])
+@events.route('/events/<name>', methods=['DELETE'])
 @calendar_track_required
 @login_verify_required
-def delete_event():
-    name = request.json['name']
-
+def delete_event(name: str):
     events_calendar = list_events(current_user.calendar_id)
     event_names = [event.name for event in events_calendar]
     nearest_event, distance = find_nearest(name, event_names)
@@ -146,5 +144,5 @@ def delete_event():
     phrase = f"Event {name} was deleted."
     return jsonify({
         "b64_phrase": text_to_base64_speech(phrase),
-        "phrase": phrase
+        "phrase": phrase,
     }), 200

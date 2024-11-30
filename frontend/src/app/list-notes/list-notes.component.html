@@ -1,13 +1,13 @@
 <div class="col-span-2 bg-gray-300 flex gap-2 flex-col p-4 h-[95%]">
   <div class="flex gap-2">
-    <button mat-icon-button (click)="goBack.emit()">
+    <button class="flex items-center" mat-icon-button (click)="goBack.emit()">
     <mat-icon>arrow_back</mat-icon>
   </button>
   <h2 class="text-gray-800">Notes list</h2>
   </div>
     <div class="mt-4 flex gap-2 flex-col h-3/4 overflow-y-auto">
       @for (note of notes; track $index) {
-        <app-message message="{{note+'| 12/12/2023'}}"></app-message>
+        <app-message message="{{note.name + ' | ' + (note.created_at | date: 'M/d/yy, h:mm a')}}"></app-message>
       }   
     </div>
 </div>

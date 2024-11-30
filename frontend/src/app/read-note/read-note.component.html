@@ -1,0 +1,15 @@
+<div class="col-span-2 bg-gray-300 flex gap-2 flex-col p-4 h-[95%]">
+  <div class="flex gap-2">
+    <button class="flex items-center" mat-icon-button (click)="goBack.emit()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h2 class="text-gray-800">Read note {{note ? note.name : ''}}</h2>
+  </div>
+  @if(note){
+    <div class="m-4 bg-gray-200 text-gray-800 border rounded-md p-4 flex gap-2 flex-col h-3/4 overflow-y-auto">
+    {{note.content}}
+  </div>
+  } @else {
+    <app-message class="mt-4" message="Waiting for information..."></app-message>
+  }
+</div>

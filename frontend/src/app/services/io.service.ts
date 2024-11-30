@@ -23,7 +23,6 @@ export class IoService {
   }
 
   read(b64Phrase: string, phrase: string) {
-    console.log('read');
     this._audioQueue$.next({ b64Phrase, phrase });
   }
 

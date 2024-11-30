@@ -12,6 +12,10 @@ import { RecognizerService } from '../services/recognizer.service';
 import { Subscription, switchMap } from 'rxjs';
 import { Command } from '../models/command';
 import { Scenario } from '../models/scenario';
+import { ReadNoteComponent } from "../read-note/read-note.component";
+import { NewEventComponent } from "../new-event/new-event.component";
+import { EventListComponent } from "../event-list/event-list.component";
+import { RemoveEventComponent } from "../remove-event/remove-event.component";
 
 
 @Component({
@@ -22,7 +26,11 @@ import { Scenario } from '../models/scenario';
     CommonModule,
     CommandListComponent,
     ListNotesComponent,
-    NewNoteComponent
+    NewNoteComponent,
+    ReadNoteComponent,
+    NewEventComponent,
+    EventListComponent,
+    RemoveEventComponent
 ],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss',

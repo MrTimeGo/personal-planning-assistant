@@ -56,15 +56,11 @@ export class NewNoteComponent implements OnInit, OnDestroy {
   micSubscription: Subscription | null = null;
   index = 0;
 
-  constructor() {
-    
-  }
   ngOnDestroy(): void {
     this.micSubscription?.unsubscribe();
     this.ioService.clearAudioQueue();
   }
   ngOnInit(): void {
-    console.log(this.scenario);
     this.readQuestion();
 
     this.micSubscription = this.ioService.micOutput$

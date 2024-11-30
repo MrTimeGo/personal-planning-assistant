@@ -3,3 +3,9 @@ export interface AudioResponse<T> {
   phrase: string;
   body: T;
 }
+
+export interface PlainAudioResponse {
+  b64_phrase: string;
+  phrase: string;
+}
+

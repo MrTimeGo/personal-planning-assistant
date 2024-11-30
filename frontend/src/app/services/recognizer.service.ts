@@ -38,4 +38,13 @@ export class RecognizerService {
       formData
     );
   }
+
+  recognizeDate(audio: Blob) {
+    const formData = new FormData();
+    formData.append('audio', audio, 'recording.wav');
+    return this.httpClient.post<{ result: string }>(
+      `${this.baseUrl}/recognize_date`,
+      formData
+    );
+  }
 }

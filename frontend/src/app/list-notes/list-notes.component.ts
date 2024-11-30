@@ -15,6 +15,7 @@ import { RecognizerService } from '../services/recognizer.service';
 import { MatIconModule } from '@angular/material/icon';
 import { AudioResponse } from '../models/audio-response';
 import { Scenario } from '../models/scenario';
+import { NoteShort } from '../models/note';
 
 @Component({
   selector: 'app-list-notes',
@@ -37,11 +38,12 @@ export class ListNotesComponent implements OnDestroy {
 
   micSubscription: Subscription | null = null;
 
-  notes: string[] = [];
+  notes: NoteShort[] = [];
+  page = 1;
 
   constructor() {
     this.noteService
-      .getNotes()
+      .getNotes(this.page)
       .pipe(
         tap((response) => {
           this.ioService.read(response.b64_phrase, response.phrase);
@@ -63,11 +65,12 @@ export class ListNotesComponent implements OnDestroy {
         switchMap((audio) => this.recognizerService.recognizeBoolean(audio)),
         switchMap((response) => {
           if (response.result) {
-            return this.noteService.getNotes();
+            this.page++;
+            return this.noteService.getNotes(this.page);
           }
           return new Observable<null>();
         }),
-        map((response?: AudioResponse<string[]> | null) =>response ? response.body : [])
+        map((response?: AudioResponse<NoteShort[]> | null) =>response ? response.body : [])
       )
       .subscribe((notes) => {
         if (notes.length > 0) {

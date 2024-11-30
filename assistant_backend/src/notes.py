@@ -69,5 +69,9 @@ def get_note(name):
     phrase = f"Here is your note... {nearest_note.content}"
     return jsonify({
         "b64_phrase": text_to_base64_speech(phrase),
-        "phrase": phrase
+        "phrase": phrase,
+        "body": {
+            "name": nearest_note_name,
+            "content": nearest_note.content
+        },
     })
