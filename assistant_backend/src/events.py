@@ -141,7 +141,7 @@ def delete_event(name: str):
     event = next(event for event in events_calendar if event.name == nearest_event)
     delete_event_calendar(current_user.calendar_id, event.id)
 
-    phrase = f"Event {name} was deleted."
+    phrase = f"Event {event.name} was deleted."
     return jsonify({
         "b64_phrase": text_to_base64_speech(phrase),
         "phrase": phrase,
