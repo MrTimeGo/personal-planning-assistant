@@ -16,6 +16,8 @@ import { ReadNoteComponent } from "../read-note/read-note.component";
 import { NewEventComponent } from "../new-event/new-event.component";
 import { EventListComponent } from "../event-list/event-list.component";
 import { RemoveEventComponent } from "../remove-event/remove-event.component";
+import { AnimationService } from '../services/animation.service';
+import { Animation } from '../models/animation';
 
 
 @Component({
@@ -38,6 +40,7 @@ import { RemoveEventComponent } from "../remove-event/remove-event.component";
 export class MainComponent {
   auth = inject(AuthService);
   ioService = inject(IoService);
+  animationService = inject(AnimationService);
   recognizerService = inject(RecognizerService);
   router = inject(Router);
 
@@ -50,10 +53,8 @@ export class MainComponent {
 
   micSubscription: Subscription | null = null;
 
-  /**
-   *
-   */
   constructor() {
+    setTimeout(()=>{this.animationService.currentAnimation$.next(Animation.Stay)}, 1000);
     this.toggleView(null);
   }
 

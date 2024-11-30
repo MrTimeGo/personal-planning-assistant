@@ -11,6 +11,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { Auth } from '../models/auth';
+import { AnimationService } from '../services/animation.service';
+import { Animation } from '../models/animation';
 
 @Component({
   selector: 'app-sign-in',
@@ -26,6 +28,7 @@ import { Auth } from '../models/auth';
 })
 export class SignInComponent {
   authService = inject(AuthService);
+  animationService = inject(AnimationService);
   router = inject(Router);
 
   form = new FormGroup({
@@ -61,6 +64,7 @@ export class SignInComponent {
 
     this.authService.signIn(this.form.value as unknown as Auth).subscribe({
       next: () => {
+        this.animationService.currentAnimation$.next(Animation.Hello);
         this.router.navigate(['']);
       },
       error: (error) => {

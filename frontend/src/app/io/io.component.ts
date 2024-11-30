@@ -2,11 +2,12 @@ import { Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { MicButtonComponent } from './mic-button/mic-button.component';
 import { IoService } from '../services/io.service';
 import { exampleAudio } from '../base64-example-audio';
+import { AnimationComponent } from "../animation/animation.component";
 
 @Component({
   selector: 'app-io',
   standalone: true,
-  imports: [MicButtonComponent],
+  imports: [MicButtonComponent, AnimationComponent],
   templateUrl: './io.component.html',
   styleUrl: './io.component.scss',
 })
