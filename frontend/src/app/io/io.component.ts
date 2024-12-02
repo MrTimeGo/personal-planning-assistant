@@ -2,7 +2,9 @@ import { Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { MicButtonComponent } from './mic-button/mic-button.component';
 import { IoService } from '../services/io.service';
 import { exampleAudio } from '../base64-example-audio';
-import { AnimationComponent } from "../animation/animation.component";
+import { AnimationComponent } from '../animation/animation.component';
+import { AnimationService } from '../services/animation.service';
+import { RobotAction } from '../models/robot-action';
 
 @Component({
   selector: 'app-io',
@@ -13,6 +15,7 @@ import { AnimationComponent } from "../animation/animation.component";
 })
 export class IoComponent {
   private ioService = inject(IoService);
+  private animationService = inject(AnimationService);
   private mediaRecorder: MediaRecorder | null = null;
   private audioChunks: Blob[] = [];
   phrase = '';
@@ -42,10 +45,16 @@ export class IoComponent {
 
     // Set the audio player source to the decoded audio
     this.audio.nativeElement.src = audioUrl;
+    this.animationService.currentAnimation$.next(RobotAction.Answer);
     this.audio.nativeElement.play();
+
+    this.audio.nativeElement.onended = () => {
+      this.animationService.currentAnimation$.next(RobotAction.Stay);
+    };
   }
 
   startRecording() {
+    this.animationService.currentAnimation$.next(RobotAction.Hear);
     navigator.mediaDevices
       .getUserMedia({ audio: true })
       .then((stream) => {
@@ -70,6 +79,7 @@ export class IoComponent {
   }
 
   stopRecording() {
+    this.animationService.currentAnimation$.next(RobotAction.Stay);
     if (this.mediaRecorder) {
       this.mediaRecorder.stop();
       this.isRecording = false;

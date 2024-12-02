@@ -1,0 +1,18 @@
+<div class="wrapper" [formGroup]="form">
+  <div class="box">
+    <h2>Add Google calendar</h2>
+    <mat-form-field>
+      <mat-label>Enter Google calendar ID</mat-label>
+      <input
+        matInput
+        formControlName="calendarId"
+        (blur)="updateCalendarIdErrorMessage()"
+        required
+      />
+      @if (form.controls.calendarId.invalid) {
+      <mat-error>{{ calendarIdErrorMessage() }}</mat-error>
+      }
+    </mat-form-field>
+    <button mat-flat-button [disabled]="form.invalid" (click)="submit()">Verify</button>
+  </div>
+</div>

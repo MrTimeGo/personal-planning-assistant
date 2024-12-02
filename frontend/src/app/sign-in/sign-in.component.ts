@@ -12,7 +12,7 @@ import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { Auth } from '../models/auth';
 import { AnimationService } from '../services/animation.service';
-import { Animation } from '../models/animation';
+import { RobotAction } from '../models/robot-action';
 
 @Component({
   selector: 'app-sign-in',
@@ -64,7 +64,7 @@ export class SignInComponent {
 
     this.authService.signIn(this.form.value as unknown as Auth).subscribe({
       next: () => {
-        this.animationService.currentAnimation$.next(Animation.Hello);
+        this.animationService.currentAnimation$.next(RobotAction.Hello);
         this.router.navigate(['']);
       },
       error: (error) => {

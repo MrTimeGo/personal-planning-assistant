@@ -9,16 +9,16 @@ import { NewNoteComponent } from '../new-note/new-note.component';
 import { ListNotesComponent } from '../list-notes/list-notes.component';
 import { IoService } from '../services/io.service';
 import { RecognizerService } from '../services/recognizer.service';
-import { Subscription, switchMap } from 'rxjs';
+import { catchError, Observable, of, Subscription, switchMap, tap } from 'rxjs';
 import { Command } from '../models/command';
 import { Scenario } from '../models/scenario';
-import { ReadNoteComponent } from "../read-note/read-note.component";
-import { NewEventComponent } from "../new-event/new-event.component";
-import { EventListComponent } from "../event-list/event-list.component";
-import { RemoveEventComponent } from "../remove-event/remove-event.component";
+import { ReadNoteComponent } from '../read-note/read-note.component';
+import { NewEventComponent } from '../new-event/new-event.component';
+import { EventListComponent } from '../event-list/event-list.component';
+import { RemoveEventComponent } from '../remove-event/remove-event.component';
 import { AnimationService } from '../services/animation.service';
-import { Animation } from '../models/animation';
-
+import { RobotAction } from '../models/robot-action';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-main',
@@ -26,14 +26,15 @@ import { Animation } from '../models/animation';
   imports: [
     IoComponent,
     CommonModule,
+    MatButtonModule,
     CommandListComponent,
     ListNotesComponent,
     NewNoteComponent,
     ReadNoteComponent,
     NewEventComponent,
     EventListComponent,
-    RemoveEventComponent
-],
+    RemoveEventComponent,
+  ],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss',
 })
@@ -54,7 +55,6 @@ export class MainComponent {
   micSubscription: Subscription | null = null;
 
   constructor() {
-    setTimeout(()=>{this.animationService.currentAnimation$.next(Animation.Stay)}, 1000);
     this.toggleView(null);
   }
 
@@ -78,11 +78,27 @@ export class MainComponent {
     } else {
       this.micSubscription = this.ioService.micOutput$
         .pipe(
-          switchMap((audio) => this.recognizerService.recognizeCommand(audio))
+          tap(() => {
+            this.animationService.currentAnimation$.next(RobotAction.Think);
+          }),
+          switchMap((resp) =>
+            of(resp).pipe(
+              switchMap((audio) =>
+                this.recognizerService.recognizeCommand(audio)
+              ),
+              catchError((error) => {
+                this.ioService.read(error.error.b64_phrase, error.error.phrase);
+                return new Observable<undefined>();
+              })
+            )
+          )
         )
-        .subscribe(({ command, scenario }) => {
-          this.toggleView(command);
-          this.scenario = scenario;
+        .subscribe((response) => {
+          this.animationService.currentAnimation$.next(RobotAction.Stay);
+          if (response) {
+            this.toggleView(response.command);
+            this.scenario = response.scenario;
+          }
         });
     }
   }

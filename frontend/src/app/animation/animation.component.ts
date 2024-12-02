@@ -1,7 +1,15 @@
-import { AfterViewInit, Component, ElementRef, inject, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  inject,
+  ViewChild,
+} from '@angular/core';
 import * as THREE from 'three';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { GLTF, GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { AnimationService } from '../services/animation.service';
+import { RobotAction } from '../models/robot-action';
+import { BehaviorSubject, debounceTime } from 'rxjs';
 
 @Component({
   selector: 'app-animation',
@@ -22,6 +30,21 @@ export class AnimationComponent implements AfterViewInit {
 
   animationService = inject(AnimationService);
 
+  models: {
+    [k: string]: {
+      model: THREE.Group<THREE.Object3DEventMap>;
+      mixer: THREE.AnimationMixer;
+      action: THREE.AnimationAction;
+    } | null;
+  } = {
+    [RobotAction.Answer]: null,
+    [RobotAction.Hear]: null,
+    [RobotAction.Think]: null,
+    [RobotAction.Stay]: null,
+  };
+
+  private _robotReady = new BehaviorSubject<boolean>(false);
+
   // public camera
   constructor() {
     this.loader = new GLTFLoader();
@@ -31,6 +54,16 @@ export class AnimationComponent implements AfterViewInit {
     setTimeout(() => {
       this.initThree();
     }, 1000);
+
+    this._robotReady.pipe(debounceTime(1000)).subscribe((ready) => {
+      if (ready) {
+        setTimeout(() => {
+          this.animationService.currentAnimation$.subscribe((action) => {
+            this.play(action);
+          });
+        }, 8450);
+      }
+    });
   }
 
   initThree() {
@@ -57,43 +90,68 @@ export class AnimationComponent implements AfterViewInit {
     );
     this.rendererContainer.nativeElement.appendChild(this.renderer.domElement);
 
-    // Load 3D model
+    const ambientLight = new THREE.AmbientLight(0xffffff);
+    this.scene.add(ambientLight);
+
+    this.clock = new THREE.Clock();
+
+    this.loadModel('answering.glb', RobotAction.Answer);
+    this.loadModel('hello.glb', RobotAction.Hello);
+    this.loadModel('hearing.glb', RobotAction.Hear);
+    this.loadModel('thinking.glb', RobotAction.Think);
+    this.loadModel('answering.glb', RobotAction.Stay);
+
+    this._robotReady.pipe(debounceTime(1000)).subscribe(() => {
+      this.play(RobotAction.Hello);
+
+      const animate = () => {
+        const delta = this.clock.getDelta();
+
+        requestAnimationFrame(animate);
+        this.mixer.update(delta);
+
+        this.renderer.render(this.scene, this.camera);
+      };
+      animate();
+    });
+  }
+
+  private loadModel(path: string, action: RobotAction) {
     this.loader.load(
-      'answering.glb',
+      path,
       (gltf) => {
         const model = gltf.scene;
         model.position.set(0, 0, 0);
-        this.scene.add(model);
 
-        // Add ambient light
-        const ambientLight = new THREE.AmbientLight(0xffffff);
-        this.scene.add(ambientLight);
-        const animations = gltf.animations;
-
-        this.mixer = new THREE.AnimationMixer(model);
-        this.clock = new THREE.Clock();
-
-        animations
-          .map((clip) => this.mixer.clipAction(clip))
-          .forEach((action) => {
-            action.play();
-          });
-
-        // Start the animation loop
-        const animate = () => {
-          const delta = this.clock.getDelta();
-
-          requestAnimationFrame(animate);
-          this.mixer.update(delta);
-
-          this.renderer.render(this.scene, this.camera);
+        const mixer = new THREE.AnimationMixer(model);
+        this.models[action] = {
+          model,
+          mixer,
+          action: mixer.clipAction(gltf.animations[0]),
         };
-        animate();
+        this._robotReady.next(true);
       },
       undefined,
       (error) => {
         console.error('Error loading GLTF:', error);
       }
     );
+  }
+
+  play(action: RobotAction) {
+    console.log('action requested: ', action);
+    this.scene.remove(
+      ...Object.values(this.models)
+        .filter((model) => !!model)
+        .map((model) => model.model)
+    );
+
+    const currentModel = this.models[action];
+    this.scene.add(currentModel!.model);
+    this.mixer = currentModel!.mixer;
+
+    if (action !== RobotAction.Stay) {
+      currentModel!.action.play();
+    }
   }
 }

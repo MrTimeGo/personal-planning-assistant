@@ -3,6 +3,7 @@ import { SignUpComponent } from './sign-up/sign-up.component';
 import { VerifyComponent } from './verify/verify.component';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { MainComponent } from './main/main.component';
+import { AddCalendarComponent } from './add-calendar/add-calendar.component';
 
 export const routes: Routes = [
   {
@@ -12,6 +13,10 @@ export const routes: Routes = [
   {
     component: VerifyComponent,
     path: 'verify',
+  },
+  {
+    component: AddCalendarComponent,
+    path: 'calendar',
   },
   {
     component: SignInComponent,

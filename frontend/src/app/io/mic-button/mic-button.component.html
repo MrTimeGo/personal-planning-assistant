@@ -1,4 +1,4 @@
-<button mat-fab (click)="toggleMicro()" [class.bg-red-500]="isMicroEnabled">
+<button mat-fab color="{{isMicroEnabled ? 'warn':''}}" (click)="toggleMicro()" [class.bg-red-500]="isMicroEnabled">
   @if(isMicroEnabled){
   <mat-icon>mic_off</mat-icon>
   } @else {
