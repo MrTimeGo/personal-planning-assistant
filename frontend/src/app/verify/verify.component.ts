@@ -33,7 +33,7 @@ export class VerifyComponent {
     const email = this.route.snapshot.queryParamMap.get('email');
     if(email && this.form.valid){
       this.authService.verify({email, code: this.form.value.code!}).subscribe({
-        next: ()=>{this.router.navigate([''])},
+        next: ()=>{this.router.navigate(['calendar'])},
         error: (error)=>{console.error(error)}
       });
     }

@@ -1,9 +1,8 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 import { AudioResponse } from '../models/audio-response';
 import { Event, Period } from '../models/event';
-import { N } from '@angular/cdk/keycodes';
 
 @Injectable({
   providedIn: 'root',

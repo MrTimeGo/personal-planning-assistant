@@ -3,11 +3,16 @@
 <!-- <button (click)="play()">Play</button> -->
 @if(profile | async; as prof){
 <div class="flex flex-col h-screen">
-  <div class="text-center">
-    {{ prof }}
-    <button (click)="logout()">Log out</button>
+    <div class="flex justify-between p-2 bg-gray-200 items-center absolute w-full">
+      <h2>Personal Assistant</h2>
+      <div class="flex gap-2 items-center">
+      <div class="text-center">
+      {{ prof }}
+      </div>
+      <button mat-stroked-button (click)="logout()">Log out</button>
+      </div>
   </div>
-  <div class="flex-1 grid grid-cols-2">
+  <div class="flex-1 grid grid-cols-2 mt-12">
     <div class="m-4 h-[90vh]">
       @switch (currentCommand) { @case (commandEnum.LIST_NOTES) {
       <app-list-notes
