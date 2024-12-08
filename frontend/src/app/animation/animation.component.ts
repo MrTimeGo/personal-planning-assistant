@@ -41,6 +41,7 @@ export class AnimationComponent implements AfterViewInit {
     [RobotAction.Hear]: null,
     [RobotAction.Think]: null,
     [RobotAction.Stay]: null,
+    [RobotAction.Bye]: null,
   };
 
   private _robotReady = new BehaviorSubject<boolean>(false);
@@ -59,6 +60,7 @@ export class AnimationComponent implements AfterViewInit {
       if (ready) {
         setTimeout(() => {
           this.animationService.currentAnimation$.subscribe((action) => {
+            console.log(action);
             this.play(action);
           });
         }, 8450);
@@ -100,6 +102,7 @@ export class AnimationComponent implements AfterViewInit {
     this.loadModel('hearing.glb', RobotAction.Hear);
     this.loadModel('thinking.glb', RobotAction.Think);
     this.loadModel('answering.glb', RobotAction.Stay);
+    this.loadModel('bye.glb', RobotAction.Bye);
 
     this._robotReady.pipe(debounceTime(1000)).subscribe(() => {
       this.play(RobotAction.Hello);

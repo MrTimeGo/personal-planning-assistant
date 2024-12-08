@@ -22,7 +22,10 @@ export class EventService {
   addCalendar(calendarId: string) {
     return this.httpClient.post(
       `${this.baseUrl}/events/track/${calendarId}`,
-      {}
+      {},
+      {
+        responseType: 'text'
+      }
     );
   }
 

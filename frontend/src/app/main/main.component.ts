@@ -59,14 +59,20 @@ export class MainComponent {
   }
 
   logout() {
-    this.auth.logout().subscribe({
-      next: () => {
-        this.router.navigate(['sign-in']);
-      },
-      error: (error) => {
-        console.error(error);
-      },
-    });
+    this.animationService.currentAnimation$.next(RobotAction.Bye);
+
+    setTimeout(() => {
+      this.auth.logout().subscribe({
+        next: () => {
+          this.router.navigate(['sign-in']).then(() => {
+            window.location.reload();
+          });
+        },
+        error: (error) => {
+          console.error(error);
+        },
+      });
+    }, 2800);
   }
 
   toggleView(command: Command | null) {

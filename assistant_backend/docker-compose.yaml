@@ -1,4 +1,4 @@
-version: '3.9'
+version: "3.9"
 
 services:
   db:
@@ -23,7 +23,7 @@ services:
       - "5000:5000"
     restart: on-failure
     volumes:
-      - ./token.json:/token.json
+      - ./token/token.json:/token/token.json
     environment:
       - DATABASE_URL=postgresql://assistant:assistant@db:5432/assistant
       - APP_SETTINGS=config.DevelopmentConfig
@@ -32,7 +32,7 @@ services:
       - MAIL_DEFAULT_SENDER=
       - SPEECH_RECOGNITION_MODEL_SIZE=base
       - GOOGLE_CREDENTIALS_FILE=/Users/slbmax/Downloads/assistant.json
-      - GOOGLE_TOKEN_FILE=/token.json
+      - GOOGLE_TOKEN_FILE=/token/token.json
       - FLASK_RUN_HOST=0.0.0.0
       - FLASK_RUN_PORT=5000
     depends_on:
