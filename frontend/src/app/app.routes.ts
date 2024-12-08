@@ -20,6 +20,10 @@ export const routes: Routes = [
     path: 'calendar',
   },
   {
+    component: AddCalendarComponent,
+    path: 'calendar',
+  },
+  {
     component: SignInComponent,
     path: 'sign-in',
   },

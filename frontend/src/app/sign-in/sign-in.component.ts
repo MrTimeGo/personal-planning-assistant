@@ -64,6 +64,7 @@ export class SignInComponent {
 
     this.authService.signIn(this.form.value as unknown as Auth).subscribe({
       next: () => {
+        this.animationService.currentAnimation$.next(RobotAction.Hello);
         this.router.navigate(['']);
       },
       error: (error) => {
