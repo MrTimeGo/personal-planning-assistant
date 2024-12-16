@@ -1,4 +1,4 @@
-<div class="wrapper" [formGroup]="form">
+<div class="wrapper background" [formGroup]="form">
   <div class="box">
     <h2>Sign up</h2>
     <mat-form-field>
@@ -21,7 +21,12 @@
           formControlName="password"
           (blur)="updatePasswordErrorMessage()"
           required
+          [type]="passwordVisible ? 'text' : 'password'"
         />
+        <button type="button" mat-icon-button matSuffix (click)="passwordVisible = !passwordVisible" [attr.aria-label]="'Hide password'"
+              [attr.aria-pressed]="!passwordVisible">
+        <mat-icon>{{passwordVisible ? 'visibility' : 'visibility_off'}}</mat-icon>
+      </button>
         @if (form.controls.password.invalid) {
           <mat-error>{{passwordErrorMessage()}}</mat-error>
         }
@@ -33,14 +38,20 @@
           formControlName="confirmPassword"
           (blur)="updateConfirmPasswordErrorMessage()"
           required
+          [type]="passwordVisible ? 'text' : 'password'"
         />
+        <button type="button" mat-icon-button matSuffix (click)="passwordVisible = !passwordVisible" [attr.aria-label]="'Hide password'"
+              [attr.aria-pressed]="!passwordVisible">
+        <mat-icon>{{passwordVisible ? 'visibility' : 'visibility_off'}}</mat-icon>
+      </button>
         @if (form.controls.confirmPassword.invalid) {
           <mat-error>{{confirmPasswordErrorMessage()}}</mat-error>
         }
       </mat-form-field>
       @if (form.invalid) {
-           <mat-error>{{confirmPasswordErrorMessage()}}</mat-error>
+           <mat-error [className]="passwordNotMatchError() ? 'block text-red-600':'hidden'">{{passwordNotMatchError()}}</mat-error>
          }
     <button mat-flat-button [disabled]="form.invalid" (click)="submit()">Sign up</button>
+    <p>Already have an account? You can <a class="text-blue-600 underline" href="/sign-in">sign in</a> then</p>
   </div>
 </div>

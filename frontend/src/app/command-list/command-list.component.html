@@ -1,7 +1,15 @@
-<div class="col-span-2 bg-gray-300 flex gap-2 flex-col p-4 h-[95%]">
-  <h2 class="text-gray-800">Here is the command list:</h2>
-  <div class="mt-4 flex gap-2 flex-col">
-    @for (command of commands; track $index) {
+<div class="col-span-2 flex gap-2 flex-col p-4 h-[95%]">
+  <b>Hello! I'm your personal assistant.</b>
+  <p>With the power of voice, I can take notes, plan events and keep your day organized, so you can focus on what truly matters!</p>
+  <b class="text-gray-800">Notes category</b>
+  <div class="flex gap-2 flex-col">
+    @for (command of commandsWithCategories.get(CommandCategory.Note); track $index) {
+      <app-message message="{{command}}"></app-message>
+    }   
+  </div>
+  <b class="text-gray-800">Events category</b>
+  <div class="flex gap-2 flex-col">
+    @for (command of commandsWithCategories.get(CommandCategory.Event); track $index) {
       <app-message message="{{command}}"></app-message>
     }   
   </div>

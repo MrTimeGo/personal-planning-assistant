@@ -42,6 +42,7 @@ export class AnimationComponent implements AfterViewInit {
     [RobotAction.Think]: null,
     [RobotAction.Stay]: null,
     [RobotAction.Bye]: null,
+    [RobotAction.Error]: null,
   };
 
   private _robotReady = new BehaviorSubject<boolean>(false);
@@ -92,8 +93,15 @@ export class AnimationComponent implements AfterViewInit {
     );
     this.rendererContainer.nativeElement.appendChild(this.renderer.domElement);
 
-    const ambientLight = new THREE.AmbientLight(0xffffff);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
     this.scene.add(ambientLight);
+
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 2.5);
+    directionalLight.position.set(5, 5, 5);
+    this.scene.add(directionalLight);
+
+
+
 
     this.clock = new THREE.Clock();
 
@@ -103,6 +111,7 @@ export class AnimationComponent implements AfterViewInit {
     this.loadModel('thinking.glb', RobotAction.Think);
     this.loadModel('answering.glb', RobotAction.Stay);
     this.loadModel('bye.glb', RobotAction.Bye);
+    this.loadModel('error.glb', RobotAction.Error);
 
     this._robotReady.pipe(debounceTime(1000)).subscribe(() => {
       this.play(RobotAction.Hello);

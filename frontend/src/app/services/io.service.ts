@@ -13,17 +13,19 @@ export class IoService {
   private _audioQueue$ = new BehaviorSubject<{
     b64Phrase: string;
     phrase: string;
+    error?: boolean
   }>({
     b64Phrase: '',
     phrase: '',
+    error: false
   });
 
   get audioQueue$() {
     return this._audioQueue$.asObservable();
   }
 
-  read(b64Phrase: string, phrase: string) {
-    this._audioQueue$.next({ b64Phrase, phrase });
+  read(b64Phrase: string, phrase: string, error?: boolean) {
+    this._audioQueue$.next({ b64Phrase, phrase, error });
   }
 
   output(audio: Blob) {

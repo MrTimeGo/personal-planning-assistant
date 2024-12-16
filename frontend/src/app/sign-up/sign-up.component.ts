@@ -6,6 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
 
 export const confirmPasswordValidator: ValidatorFn = (
   control: AbstractControl
@@ -23,6 +24,7 @@ export const confirmPasswordValidator: ValidatorFn = (
     MatInputModule,
     MatButtonModule,
     ReactiveFormsModule,
+    MatIconModule,
   ],
   templateUrl: './sign-up.component.html',
   styleUrl: './sign-up.component.scss',
@@ -45,6 +47,9 @@ export class SignUpComponent {
   emailErrorMessage = signal('');
   passwordErrorMessage = signal('');
   confirmPasswordErrorMessage = signal('');
+  passwordNotMatchError = signal('');
+
+  passwordVisible=false;
 
   submit(){
     if(this.form.valid){
@@ -74,10 +79,11 @@ export class SignUpComponent {
       this.form.controls.confirmPassword.dirty &&
       this.form.hasError('PasswordNoMatch')
     ) {
-      this.confirmPasswordErrorMessage.set('Password is not matched');
+      this.passwordNotMatchError.set('Password is not matched');
     } else {
       this.passwordErrorMessage.set('');
       this.confirmPasswordErrorMessage.set('');
+      this.passwordNotMatchError.set('');
     }
   }
 
@@ -85,9 +91,10 @@ export class SignUpComponent {
     if (this.form.controls.confirmPassword.hasError('required')) {
       this.confirmPasswordErrorMessage.set('Confirmation password is required');
     } else if (this.form.hasError('PasswordNoMatch')) {
-      this.confirmPasswordErrorMessage.set('Password is not matched');
+      this.passwordNotMatchError.set('Password is not matched');
     } else {
       this.confirmPasswordErrorMessage.set('');
+      this.passwordNotMatchError.set('');
     }
   }
 }

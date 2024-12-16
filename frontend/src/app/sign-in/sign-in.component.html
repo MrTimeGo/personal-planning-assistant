@@ -1,4 +1,4 @@
-<div class="wrapper" [formGroup]="form">
+<div class="wrappe backgroundr" [formGroup]="form">
   <div class="box">
     <h2>Sign in</h2>
     <mat-form-field>
@@ -21,7 +21,12 @@
         formControlName="password"
         (blur)="updatePasswordErrorMessage()"
         required
+        [type]="passwordVisible ? 'text' : 'password'"
       />
+      <button type="button" mat-icon-button matSuffix (click)="passwordVisible = !passwordVisible" [attr.aria-label]="'Hide password'"
+              [attr.aria-pressed]="!passwordVisible">
+        <mat-icon>{{passwordVisible ? 'visibility' : 'visibility_off'}}</mat-icon>
+      </button>
       @if (form.controls.password.invalid) {
       <mat-error>{{ passwordErrorMessage() }}</mat-error>
       }
@@ -29,5 +34,6 @@
     <button mat-flat-button [disabled]="form.invalid" (click)="submit()">
       Log in
     </button>
+    <p>Don't have an account? You can <a class="text-blue-600 underline" href="/sign-up">sign up</a> then.</p>
   </div>
 </div>

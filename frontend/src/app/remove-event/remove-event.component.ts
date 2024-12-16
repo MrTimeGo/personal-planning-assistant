@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { Subscription, switchMap, of, catchError, Observable } from 'rxjs';
+import { Subscription, switchMap, of, catchError, Observable, tap } from 'rxjs';
 import { MessageComponent } from '../message/message.component';
 import { Note } from '../models/note';
 import { Scenario } from '../models/scenario';
@@ -9,6 +9,8 @@ import { IoService } from '../services/io.service';
 import { NoteService } from '../services/note.service';
 import { RecognizerService } from '../services/recognizer.service';
 import { EventService } from '../services/event.service';
+import { RobotAction } from '../models/robot-action';
+import { AnimationService } from '../services/animation.service';
 
 @Component({
   selector: 'app-remove-event',
@@ -21,6 +23,7 @@ export class RemoveEventComponent implements OnInit, OnDestroy {
   eventService = inject(EventService);
   ioService = inject(IoService);
   recognizerService = inject(RecognizerService);
+  animationService = inject(AnimationService)
 
   @Input() scenario!: Scenario;
   @Output() goBack = new EventEmitter();
@@ -35,12 +38,15 @@ export class RemoveEventComponent implements OnInit, OnDestroy {
 
     this.micSubscription = this.ioService.micOutput$
       .pipe(
+        tap(() => {
+          this.animationService.playAnimation(RobotAction.Think);
+        }),
         switchMap((resp) =>
           of(resp).pipe(
             switchMap((audio) => this.recognizerService.recognizeText(audio)),
             switchMap((response) => this.eventService.removeEvent(response.result)),
             catchError((error) => {
-              this.ioService.read(error.error.b64_phrase, error.error.phrase);
+              this.ioService.read(error.error.b64_phrase, error.error.phrase, true);
               return new Observable<undefined>();
             })
           )

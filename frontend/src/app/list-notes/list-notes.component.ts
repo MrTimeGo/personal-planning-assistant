@@ -16,6 +16,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { AudioResponse } from '../models/audio-response';
 import { Scenario } from '../models/scenario';
 import { NoteShort } from '../models/note';
+import { RobotAction } from '../models/robot-action';
+import { AnimationService } from '../services/animation.service';
 
 @Component({
   selector: 'app-list-notes',
@@ -32,6 +34,7 @@ export class ListNotesComponent implements OnDestroy {
   noteService = inject(NoteService);
   ioService = inject(IoService);
   recognizerService = inject(RecognizerService);
+  animationService = inject(AnimationService);
 
   @Input() scenario!: Scenario;
   @Output() goBack = new EventEmitter();
@@ -42,6 +45,7 @@ export class ListNotesComponent implements OnDestroy {
   page = 1;
 
   constructor() {
+    this.animationService.playAnimation(RobotAction.Think);
     this.noteService
       .getNotes(this.page)
       .pipe(
@@ -66,6 +70,7 @@ export class ListNotesComponent implements OnDestroy {
         switchMap((response) => {
           if (response.result) {
             this.page++;
+            this.animationService.playAnimation(RobotAction.Think);
             return this.noteService.getNotes(this.page);
           }
           return new Observable<null>();

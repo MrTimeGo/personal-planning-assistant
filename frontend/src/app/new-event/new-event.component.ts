@@ -10,6 +10,8 @@ import { IoService } from '../services/io.service';
 import { NoteService } from '../services/note.service';
 import { RecognizerService } from '../services/recognizer.service';
 import { EventService } from '../services/event.service';
+import { RobotAction } from '../models/robot-action';
+import { AnimationService } from '../services/animation.service';
 
 @Component({
   selector: 'app-new-event',
@@ -28,6 +30,7 @@ export class NewEventComponent implements OnInit, OnDestroy {
   eventService = inject(EventService);
   ioService = inject(IoService);
   recognizerService = inject(RecognizerService);
+  animationService = inject(AnimationService);
 
   @Input() scenario!: Scenario;
   @Output() goBack = new EventEmitter();
@@ -56,6 +59,9 @@ export class NewEventComponent implements OnInit, OnDestroy {
 
     this.micSubscription = this.ioService.micOutput$
       .pipe(
+        tap(() => {
+          this.animationService.playAnimation(RobotAction.Think);
+        }),
         switchMap((audio) =>
           this.index === 0
             ? this.recognizerService.recognizeText(audio)
@@ -64,6 +70,7 @@ export class NewEventComponent implements OnInit, OnDestroy {
         map((response) => response.result)
       )
       .subscribe((text) => {
+        this.animationService.playAnimation(RobotAction.Stay)
         if (this.index === 0) {
           this.form.controls.name.patchValue(text.toString());
         } else if (this.index === 1) {
@@ -113,6 +120,7 @@ export class NewEventComponent implements OnInit, OnDestroy {
     if (this.form.invalid) {
       return;
     }
+    this.animationService.playAnimation(RobotAction.Think);
     this.eventService.trackCalendar().pipe(
       tap(({calendar_id})=> {
         console.log(calendar_id);

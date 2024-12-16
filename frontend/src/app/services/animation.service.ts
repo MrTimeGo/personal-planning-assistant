@@ -6,5 +6,20 @@ import { RobotAction } from '../models/robot-action';
   providedIn: 'root',
 })
 export class AnimationService {
-  currentAnimation$ = new BehaviorSubject<RobotAction>(RobotAction.Stay);
+
+  get currentAnimation$() {
+    return this._currentAnimation$.asObservable();
+  }
+
+  private _currentAnimation$ = new BehaviorSubject<RobotAction>(RobotAction.Stay);
+
+  playAnimation(action: RobotAction) {
+    this._currentAnimation$.next(action);
+
+    // if (action === RobotAction.Error) {
+    //   setTimeout(() => {
+    //     this._currentAnimation$.next(RobotAction.Stay);
+    //   }, 2000);
+    // }
+  }
 }
