@@ -2,8 +2,8 @@
 
 <!-- <button (click)="play()">Play</button> -->
 @if(profile | async; as prof){
-<div class="flex flex-col h-screen">
-    <div class="flex justify-between p-2 bg-gray-200 items-center absolute w-full">
+<div class="flex flex-col h-screen background overflow-hidden">
+    <div class="flex justify-between p-2 bg-blue-50 items-center absolute w-full">
       <h2>Personal Assistant</h2>
       <div class="flex gap-2 items-center">
       <div class="text-center">
@@ -13,7 +13,7 @@
       </div>
   </div>
   <div class="flex-1 grid grid-cols-2 mt-12">
-    <div class="m-4 h-[90vh]">
+    <div class="m-4 h-[90vh] bg-opacity-40 bg-blue-50 rounded-lg">
       @switch (currentCommand) { @case (commandEnum.LIST_NOTES) {
       <app-list-notes
         [scenario]="scenario!"

@@ -8,7 +8,9 @@ import { NoteService } from '../services/note.service';
 import { RecognizerService } from '../services/recognizer.service';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-import { catchError, map, Observable, of, repeat, switchMap } from 'rxjs';
+import { catchError, map, Observable, of, repeat, switchMap, tap } from 'rxjs';
+import { RobotAction } from '../models/robot-action';
+import { AnimationService } from '../services/animation.service';
 
 @Component({
   selector: 'app-read-note',
@@ -21,6 +23,7 @@ export class ReadNoteComponent implements OnInit, OnDestroy {
   noteService = inject(NoteService);
   ioService = inject(IoService);
   recognizerService = inject(RecognizerService);
+  animationService = inject(AnimationService);
 
   @Input() scenario!: Scenario;
   @Output() goBack = new EventEmitter();
@@ -35,12 +38,15 @@ export class ReadNoteComponent implements OnInit, OnDestroy {
 
     this.micSubscription = this.ioService.micOutput$
       .pipe(
+        tap(() => {
+          this.animationService.playAnimation(RobotAction.Think);
+        }),
         switchMap((resp) =>
           of(resp).pipe(
             switchMap((audio) => this.recognizerService.recognizeText(audio)),
             switchMap((response) => this.noteService.getNote(response.result)),
             catchError((error) => {
-              this.ioService.read(error.error.b64_phrase, error.error.phrase);
+              this.ioService.read(error.error.b64_phrase, error.error.phrase, true);
               return new Observable<undefined>();
             })
           )

@@ -20,9 +20,11 @@ import { MatInputModule } from '@angular/material/input';
 import { Scenario } from '../models/scenario';
 import { IoService } from '../services/io.service';
 import { RecognizerService } from '../services/recognizer.service';
-import { map, Subscription, switchMap } from 'rxjs';
+import { map, Subscription, switchMap, tap } from 'rxjs';
 import { NoteService } from '../services/note.service';
 import { MatIconModule } from '@angular/material/icon';
+import { RobotAction } from '../models/robot-action';
+import { AnimationService } from '../services/animation.service';
 
 @Component({
   selector: 'app-new-note',
@@ -41,6 +43,7 @@ export class NewNoteComponent implements OnInit, OnDestroy {
   noteService = inject(NoteService);
   ioService = inject(IoService);
   recognizerService = inject(RecognizerService);
+  animationService = inject(AnimationService);
 
   @Input() scenario!: Scenario;
   @Output() goBack = new EventEmitter();
@@ -65,10 +68,14 @@ export class NewNoteComponent implements OnInit, OnDestroy {
 
     this.micSubscription = this.ioService.micOutput$
       .pipe(
+        tap(() => {
+          this.animationService.playAnimation(RobotAction.Think);
+        }),
         switchMap((audio) => this.recognizerService.recognizeText(audio)),
         map((response) => response.result)
       )
       .subscribe((text) => {
+        this.animationService.playAnimation(RobotAction.Stay);
         if (this.index === 0) {
           this.form.controls.name.patchValue(text);
         } else if (this.index === 1) {
@@ -108,6 +115,7 @@ export class NewNoteComponent implements OnInit, OnDestroy {
     if (this.form.invalid) {
       return;
     }
+    this.animationService.playAnimation(RobotAction.Think);
     this.noteService.createNote({
       name: this.form.value.name!,
       content: this.form.value.content!,

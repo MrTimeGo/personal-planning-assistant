@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 import { Auth } from '../models/auth';
 import { AnimationService } from '../services/animation.service';
 import { RobotAction } from '../models/robot-action';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-sign-in',
@@ -22,6 +23,7 @@ import { RobotAction } from '../models/robot-action';
     MatInputModule,
     MatButtonModule,
     ReactiveFormsModule,
+    MatIconModule,
   ],
   templateUrl: './sign-in.component.html',
   styleUrl: './sign-in.component.scss',
@@ -38,6 +40,8 @@ export class SignInComponent {
 
   emailErrorMessage = signal('');
   passwordErrorMessage = signal('');
+
+  passwordVisible = false;
 
   updateEmailErrorMessage() {
     if (this.form.controls.email.hasError('required')) {

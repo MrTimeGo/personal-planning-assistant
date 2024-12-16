@@ -19,6 +19,8 @@ import { Event, Period } from '../models/event';
 import { map, Observable, Subscription, switchMap, tap } from 'rxjs';
 import { AudioResponse } from '../models/audio-response';
 import { NoteShort } from '../models/note';
+import { AnimationService } from '../services/animation.service';
+import { RobotAction } from '../models/robot-action';
 
 @Component({
   selector: 'app-event-list',
@@ -31,6 +33,7 @@ export class EventListComponent implements OnInit, OnDestroy {
   eventService = inject(EventService);
   ioService = inject(IoService);
   recognizerService = inject(RecognizerService);
+  animationService = inject(AnimationService);
 
   @Input() scenario!: Scenario;
   @Input() command!: Command;
@@ -50,6 +53,7 @@ export class EventListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.period = this.periods[this.command];
+    this.animationService.playAnimation(RobotAction.Think);
     this.eventService
       .getEvents(this.period)
       .pipe(

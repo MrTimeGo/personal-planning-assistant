@@ -24,7 +24,7 @@ export class IoComponent {
   constructor() {
     this.ioService.audioQueue$.subscribe((audioData) => {
       if (audioData.b64Phrase) {
-        this.play(audioData.b64Phrase);
+        this.play(audioData.b64Phrase, audioData.error);
       }
       this.phrase = audioData.phrase;
     });
@@ -32,7 +32,7 @@ export class IoComponent {
 
   @ViewChild('audioPlayer') audio!: ElementRef;
 
-  play(b64Phrase: string) {
+  play(b64Phrase: string, error?: boolean) {
     const audioBinary = atob(b64Phrase); // Decode base64
     const audioArray = new Uint8Array(audioBinary.length);
 
@@ -45,16 +45,16 @@ export class IoComponent {
 
     // Set the audio player source to the decoded audio
     this.audio.nativeElement.src = audioUrl;
-    this.animationService.currentAnimation$.next(RobotAction.Answer);
+    this.animationService.playAnimation(error? RobotAction.Error : RobotAction.Answer);
     this.audio.nativeElement.play();
 
     this.audio.nativeElement.onended = () => {
-      this.animationService.currentAnimation$.next(RobotAction.Stay);
+      this.animationService.playAnimation(RobotAction.Stay);
     };
   }
 
   startRecording() {
-    this.animationService.currentAnimation$.next(RobotAction.Hear);
+    this.animationService.playAnimation(RobotAction.Hear);
     navigator.mediaDevices
       .getUserMedia({ audio: true })
       .then((stream) => {
@@ -79,7 +79,7 @@ export class IoComponent {
   }
 
   stopRecording() {
-    this.animationService.currentAnimation$.next(RobotAction.Stay);
+    this.animationService.playAnimation(RobotAction.Stay);
     if (this.mediaRecorder) {
       this.mediaRecorder.stop();
       this.isRecording = false;

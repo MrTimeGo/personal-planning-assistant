@@ -59,7 +59,7 @@ export class MainComponent {
   }
 
   logout() {
-    this.animationService.currentAnimation$.next(RobotAction.Bye);
+    this.animationService.playAnimation(RobotAction.Bye);
 
     setTimeout(() => {
       this.auth.logout().subscribe({
@@ -85,7 +85,7 @@ export class MainComponent {
       this.micSubscription = this.ioService.micOutput$
         .pipe(
           tap(() => {
-            this.animationService.currentAnimation$.next(RobotAction.Think);
+            this.animationService.playAnimation(RobotAction.Think);
           }),
           switchMap((resp) =>
             of(resp).pipe(
@@ -93,14 +93,14 @@ export class MainComponent {
                 this.recognizerService.recognizeCommand(audio)
               ),
               catchError((error) => {
-                this.ioService.read(error.error.b64_phrase, error.error.phrase);
+                this.ioService.read(error.error.b64_phrase, error.error.phrase, true);
                 return new Observable<undefined>();
               })
             )
           )
         )
         .subscribe((response) => {
-          this.animationService.currentAnimation$.next(RobotAction.Stay);
+          this.animationService.playAnimation(RobotAction.Stay);
           if (response) {
             this.toggleView(response.command);
             this.scenario = response.scenario;
